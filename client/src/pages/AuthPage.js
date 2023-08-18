@@ -1,45 +1,43 @@
-import React, {useContext, useEffect, useState} from 'react';
-import { useHttp } from '../hooks/http.hook';
-import {useMessage} from '../hooks/message.hook';
-import {AuthContext} from "../context/AuthContext";
-
+import React, { useContext, useEffect, useState } from 'react'
+import { useHttp } from '../hooks/http.hook'
+import { useMessage } from '../hooks/message.hook'
+import { AuthContext } from '../context/AuthContext'
 
 export const AuthPage = () => {
   const auth = useContext(AuthContext)
-  const message = useMessage();
-  const { loading, request, error, clearError } = useHttp();
+  const message = useMessage()
+  const { loading, request, error, clearError } = useHttp()
   const [form, setForm] = useState({
     email: '',
     password: '',
-  });
+  })
   useEffect(() => {
-
     message(error)
     clearError()
   }, [error, message, clearError])
-  useEffect(()=>{
+  useEffect(() => {
     window.M.updateTextFields()
   })
   const changeHandler = (event) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
-  };
+    setForm({ ...form, [event.target.name]: event.target.value })
+  }
   const registerHandler = async () => {
     try {
-      const data = await request('/api/auth/register', 'POST', { ...form });
+      const data = await request('/api/auth/register', 'POST', { ...form })
       message(data.message)
     } catch (e) {}
-  };
+  }
   const loginHandler = async () => {
     try {
-      const data = await request('/api/auth/login', 'POST', { ...form });
+      const data = await request('/api/auth/login', 'POST', { ...form })
       message(data.message)
       auth.login(data.token, data.userId)
     } catch (e) {}
-  };
+  }
   return (
     <div className="row">
       <div className="col s6 offset-s3">
-        <h4>выеби себе мозг всякой хуйней</h4>
+        <h4>Получение токена после авторизации</h4>
         <div className="card blue-grey darken-1">
           <div className="card-content white-text">
             <span className="card-title">Авторизация</span>
@@ -88,5 +86,5 @@ export const AuthPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
